@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public List<User> getAll() {
         List<User> result = userRepository.findAll();
         log.info("IN getAll - {} users found", result.size());

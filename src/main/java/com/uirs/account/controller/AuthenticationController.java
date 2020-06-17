@@ -2,6 +2,7 @@ package com.uirs.account.controller;
 
 import com.uirs.account.dto.AuthenticationRequestDTO;
 import com.uirs.account.dto.AuthenticationResponseDTO;
+import com.uirs.account.dto.UserRequestDTO;
 import com.uirs.account.entity.User;
 import com.uirs.account.security.jwt.JwtTokenProvider;
 import com.uirs.account.service.UserService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping(value = "/api/auth/")
@@ -54,6 +57,28 @@ public class AuthenticationController {
         }
         catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
+        }
+    }
+
+    @PostMapping("register")
+    public ResponseEntity register(@RequestBody UserRequestDTO requestDTO) {
+        try {
+            User newUser = new User(
+                    requestDTO.getUsername(),
+                    requestDTO.getFirstName(),
+                    requestDTO.getLastName(),
+                    requestDTO.getSecondName(),
+                    requestDTO.getEmail(),
+                    requestDTO.getPassword(),
+                    LocalDate.parse(requestDTO.getBirthday())
+            );
+
+            userService.register(newUser);
+
+            return ResponseEntity.ok("Successfully registered");
+        }
+        catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid Credentials");
         }
     }
 }

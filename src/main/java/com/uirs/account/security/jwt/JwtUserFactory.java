@@ -16,7 +16,7 @@ public final class JwtUserFactory {
 
     }
 
-    //создание jwtuser
+    //фарбика создания jwtuser
     // на основе user
     // для работы spring security
     public static JwtUser create(User user) {
@@ -28,6 +28,7 @@ public final class JwtUserFactory {
                 user.getSecondName(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getBirthday(),
                 mapToGrantedAuthorities(new ArrayList<>(user.getRoles())),
                 user.getStatus().equals(Status.ACTIVE),
                 user.getUpdated()

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -32,18 +33,22 @@ public class User extends BaseEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "birthday")
+    private LocalDate birthday;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}) //соединение М:М через промежуточную таблицу user_roles
     private List<Role> roles;
 
-    public User(String username, String firstName, String lastName, String secondName, String email, String password) {
+    public User(String username, String firstName, String lastName, String secondName, String email, String password, LocalDate birthday) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.secondName = secondName;
         this.email = email;
         this.password = password;
+        this.birthday = birthday;
     }
 }

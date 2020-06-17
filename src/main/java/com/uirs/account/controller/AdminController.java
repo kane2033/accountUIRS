@@ -1,7 +1,6 @@
 package com.uirs.account.controller;
 
-
-import com.uirs.account.dto.UserDTO;
+import com.uirs.account.dto.AdminUserDTO;
 import com.uirs.account.entity.User;
 import com.uirs.account.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/users/")
-public class UserController {
+@RequestMapping(value = "/api/admin/")
+public class AdminController {
+
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping(value = "{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id){
+    @GetMapping(value = "users/{id}")
+    public ResponseEntity<AdminUserDTO> getUserById(@PathVariable(name = "id") Long id) {
         User user = userService.findById(id);
 
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        UserDTO result = UserDTO.fromUser(user);
+        AdminUserDTO result = AdminUserDTO.fromUser(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

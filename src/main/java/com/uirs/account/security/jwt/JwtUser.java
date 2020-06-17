@@ -1,9 +1,11 @@
 package com.uirs.account.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.tomcat.jni.Local;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -17,6 +19,7 @@ public class JwtUser implements UserDetails {
     private final String secondName; //отчество
     private final String email;
     private final String password;
+    private final LocalDate birthday;
     private final boolean enabled;
     private final Date lastPasswordResetDate;
     private final Collection<? extends GrantedAuthority> authorities; //права
@@ -28,10 +31,11 @@ public class JwtUser implements UserDetails {
                    String secondName,
                    String email,
                    String password,
+                   LocalDate birthday,
                    Collection<? extends GrantedAuthority> authorities,
                    boolean enabled,
                    Date lastPasswordResetDate
-                   ) {
+    ) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -39,6 +43,7 @@ public class JwtUser implements UserDetails {
         this.secondName = secondName;
         this.email = email;
         this.password = password;
+        this.birthday = birthday;
         this.authorities = authorities;
         this.enabled = enabled;
         this.lastPasswordResetDate = lastPasswordResetDate;
@@ -72,11 +77,11 @@ public class JwtUser implements UserDetails {
         return true;
     }
 
-    public String getFirstname() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public String getLastname() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -93,6 +98,8 @@ public class JwtUser implements UserDetails {
     public String getPassword() {
         return password;
     }
+
+    public LocalDate getBirthday() {return birthday;}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

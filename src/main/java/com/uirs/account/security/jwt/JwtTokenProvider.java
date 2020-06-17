@@ -27,7 +27,7 @@ public class JwtTokenProvider {
     @Value("${jwt.token.secret}") //секретное слово кодировки
     private String secret;
 
-    @Value("${jwt.token.expired}") //через сколько мс истечет токен (48ч)
+    @Value("${jwt.token.expired}") //через сколько мс истечет токен (7д)
     private long validityInMilliseconds;
 
     @Autowired

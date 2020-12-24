@@ -9,7 +9,8 @@ class LoginForm extends React.Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            errorMsg: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -30,6 +31,9 @@ class LoginForm extends React.Component {
                 this.props.history.push("/");
             })
             .catch(error => {
+                this.setState({
+                    errorMsg: error.message
+                })
                 console.log(error);
             });
     }
@@ -51,10 +55,13 @@ class LoginForm extends React.Component {
             <form onSubmit={this.handleSubmit} className="form" id="login-form">
                 <h1>Вход в личный кабинет:</h1>
                 <label>Логин:</label>
-                <input name="username" type="text" value={this.state.username} onChange={this.handleChange} size="40" required/> <br/>
+                <input name="username" type="text" value={this.state.username} onChange={this.handleChange} size="40"
+                       required/> <br/>
                 <label>Пароль:</label>
-                <input name="password" type="password" value={this.state.password} onChange={this.handleChange} size="40" required/> <br/>
-                <input type="submit" value="Войти" />
+                <input name="password" type="password" value={this.state.password} onChange={this.handleChange}
+                       size="40" required/> <br/>
+                <input type="submit" value="Войти"/>
+                <div>{this.state.errorMsg}</div>
             </form>
         );
     }

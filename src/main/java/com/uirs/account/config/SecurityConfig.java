@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
 
     private static final String ADMIN_ENDPOINT = "/api/admin/**";
-    private static final String LOGIN_ENDPOINT = "/api/auth/**";
+    private static final String AUTH_ENDPOINT = "/api/auth/**";
 
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
@@ -42,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
             cors.setAllowedOrigins(List.of("http://localhost:3000"));
-            cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             cors.setAllowedHeaders(List.of("*"));
             return cors;
         })
@@ -52,9 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //сессии не создаются
                 .and()
                 .authorizeRequests() //настройка авторизации запросов
-                .antMatchers(LOGIN_ENDPOINT).permitAll() //логин доступен всем
+                .antMatchers(AUTH_ENDPOINT).permitAll() //логин и регистрация доступны всем
                 .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN") //разрешен только админам
-                .anyRequest().authenticated() //все остальные запросы должны быть аунтефицированы (любая роль)
+                //.anyRequest().authenticated() //все остальные запросы должны быть аунтефицированы (любая роль)
                 .and()
                 .apply(new JwtConfigure(jwtTokenProvider)); //проверка каждого запроса на сервер
     }

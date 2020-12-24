@@ -114,4 +114,11 @@ body {
   height: 100vh;
 }
 
+.required {
+  color: red;
+}
+
+
+
+
 

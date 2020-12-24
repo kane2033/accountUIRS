@@ -9,6 +9,7 @@ import com.uirs.account.repository.UserRepository;
 import com.uirs.account.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,9 +66,14 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+
     @Override
+    //@Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public User findByUsername(String username) {
         User result = userRepository.findByUsername(username);
+        if (result == null) { //если такого пользователя нет
+            throw new UsernameNotFoundException("User with username " + username + "not found");
+        }
         log.info("IN findByUsername - user {} found by username: {}", result, username);
         return result;
     }

@@ -38,7 +38,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public ResponseEntity<AuthenticationResponseDTO> login(@RequestBody AuthenticationRequestDTO requestDTO) {
         try {
             String username = requestDTO.getUsername();
             //дается аунтиф-я на основе отправленного логина и пароля
@@ -61,7 +61,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("register")
-    public ResponseEntity register(@RequestBody UserRequestDTO requestDTO) {
+    public ResponseEntity<String> register(@RequestBody UserRequestDTO requestDTO) {
         try {
             User newUser = new User(
                     requestDTO.getUsername(),
@@ -70,7 +70,7 @@ public class AuthenticationController {
                     requestDTO.getSecondName(),
                     requestDTO.getEmail(),
                     requestDTO.getPassword(),
-                    LocalDate.parse(requestDTO.getBirthday())
+                    requestDTO.getBirthday().isEmpty() ? null : LocalDate.parse(requestDTO.getBirthday())
             );
 
             userService.register(newUser);
@@ -78,7 +78,7 @@ public class AuthenticationController {
             return ResponseEntity.ok("Successfully registered");
         }
         catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid Credentials");
+            throw new BadCredentialsException("Could not register new user");
         }
     }
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 //класс, проверяющий наличие токена в запросах
 public class JwtTokenFilter extends GenericFilterBean {
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -24,7 +24,8 @@ public class JwtTokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
 
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) req); //получение токена из запроса
-        if (token != null && jwtTokenProvider.validateToken(token)) {
+        System.out.println("doFilter(): Token = " + token);
+        if (token != null && !token.equals("null") && jwtTokenProvider.validateToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
 
             if (auth != null) {

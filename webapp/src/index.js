@@ -7,17 +7,21 @@ import LoginForm from "./forms/LoginForm";
 import RegisterForm from "./forms/RegisterForm"
 import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/HomePage";
-import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import UserMoviesPage from "./pages/UserMoviesPage";
+import MoviesPage from "./pages/MoviesPage";
 
 
 ReactDOM.render(
-    <BrowserRouter >
+    <BrowserRouter>
         <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/login" component={LoginForm} />
-            <Route path="/register" component={RegisterForm} />
-            <Route path="/admin" component={AdminPage} />
-            <Route path="/profile" component={ProfilePage} />
+            <Route exact path="/" component={HomePage}/>
+            <Route path="/login" component={LoginForm}/>
+            <Route path="/register" component={RegisterForm}/>
+            <Route path="/admin" component={AdminPage}/>
+            <Route path="/profile" component={ProfilePage}/>
+            <Route path="/user-movies" component={UserMoviesPage}/>
+            <Route path="/movies" component={MoviesPage}/>
         </Switch>
     </BrowserRouter>,
 /*  <React.StrictMode>

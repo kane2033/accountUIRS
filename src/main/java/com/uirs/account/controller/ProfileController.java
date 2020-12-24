@@ -8,7 +8,6 @@ import com.uirs.account.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,40 +21,21 @@ public class ProfileController {
         this.userService = userService;
     }
 
-/*    @GetMapping(value = "{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id){
-        User user = userService.findById(id);
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        UserDTO result = UserDTO.fromUserToDTO(user);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }*/
-
     @GetMapping(path = "")
-    public ResponseEntity<UserDTO> getUserByUsername(@RequestParam String username){
-        User user = userService.findByUsername(username);
-
-        if (user == null) {
+    public ResponseEntity<UserDTO> getUserByUsername(@RequestParam String username) {
+        try {
+            User user = userService.findByUsername(username);
+            UserDTO result = UserDTO.fromUserToDTO(user);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (UsernameNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        UserDTO result = UserDTO.fromUserToDTO(user);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping(path = "update", consumes={"application/json"})
-    public ResponseEntity updateUser(@RequestBody UserRequestDTO requestDTO) {
+    @PostMapping(path = "update", consumes = {"application/json"})
+    public ResponseEntity<String> updateUser(@RequestBody UserRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
         User user = userService.findByUsername(username);
-
-        if (user == null) { //если такого пользователя нет
-            throw new UsernameNotFoundException("User with username " + username + "not found");
-        }
 
         requestDTO.updateUser(user);
         userService.save(user);
